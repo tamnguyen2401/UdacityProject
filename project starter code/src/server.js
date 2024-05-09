@@ -36,7 +36,7 @@ import {filterImageFromURL, deleteLocalFiles} from '../util/util.js'
     res.send("try GET /filteredimage?image_url={{}}")
   } );
   
-  app.get("/filteredimage", async (req, res) => {
+  app.get("/filteredimage", async (req, res) => {    
     //get image url
     let imgUrl = req.query['image_url'];
 
@@ -54,12 +54,21 @@ import {filterImageFromURL, deleteLocalFiles} from '../util/util.js'
       console.log('Filter path : ' + outpath);
 
       //send the resulting file in the response
-      res.sendFile(outpath);
+      res.sendFile(outpath, function (err) {
+        if (err) {
+            console.error('Error sending file:', err);
+        } else {
+            console.log('Sent:', outpath);
 
-      console.log('Send file OK');
+            let arr = [];
+            arr.push(outpath);
+            //deletes any files on the server on finish of the response
+            deleteLocalFiles(arr);
 
-      //deletes any files on the server on finish of the response
-      deleteLocalFiles(outpath);
+            res.sendStatus(200);
+        }
+      });
+
       }).catch((error) => {
         return res.status(442).send('Failed : ' + error);
       });

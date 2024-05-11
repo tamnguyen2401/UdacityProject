@@ -15,7 +15,7 @@ import fetch from "node-fetch";
       const res = await fetch(inputURL);
       const data = await res.arrayBuffer();
       const photo = await Jimp.read(data);
-      //const photo = await Jimp.read(inputURL);
+      //const photo = await Jimp.read(inputURL);1
       const outpath =
         "/tmp/filtered." + Math.floor(Math.random() * 2000) + ".jpg";
       await photo
